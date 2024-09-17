@@ -54,17 +54,36 @@ double eps = 1e-12;
 
 int main()
 {
- ll n,p;    cin >> n >> p;
- v64 prices(n);
- v64 pages(n);
- forn(i,n)  cin >> prices[i];
- forn(i,n)  cin >> pages[i];
- vp64 bp(n);
- forn(i,n)  bp[i] = {prices[i],pages[i]};
- for(int i = 1; i <= p; i++){
-     for(int i = 0; i < n ;i++){
-         
-     }
- }
- return 0;
+
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+
+    int n;  cin >> n;
+    vector<int> weight(n);
+    for(int i = 0; i < n; i++) {
+        cin >> weight[i];
+    }
+
+    int maxCap; cin >> maxCap;
+    vector<vector<int> > dp(maxCap + 1, vector<int> (n + 1));
+
+    for(int w = 0; w <= maxCap; w++) {
+        for(int idx = 0; idx <= n; idx++) {
+
+            if(idx == 0 || w == 0) dp[w][idx] = 0;
+            else if(weight[idx-1] <= w) dp[w][idx] = max(weight[idx-1] + dp[w - weight[idx]][idx-1], dp[w][idx-1]);
+            else dp[w][idx] = dp[w][idx - 1];
+        }
+    }
+
+    for(auto x: dp) {
+        for(auto y: x) {
+            cout << y << " ";
+        }
+        cout << endl;
+    }
+
+    cout << dp[maxCap][n];
 }
